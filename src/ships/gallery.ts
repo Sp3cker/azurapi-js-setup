@@ -3,6 +3,20 @@ import path from "path";
 import {BASE, camelize, fetch, galleryThumbnailUrlToActualUrl} from "../utils";
 import {GalleryItem, Skin, SkinInfo} from "./ship";
 
+const skinNameHeaders = Object.freeze<Record<string,string>>({
+    'enClient':'enLimited',
+    'cnClient': 'cnLimited',
+    'jpClient':'jpLimited'
+})
+
+const handleLtdSkin = (row: Element) => {
+    const rowElements = row.getElementsByTagName("td")
+    const clientName = rowElements[0].textContent.trim();
+    const clientLtd = rowElements[1] ? rowElements[1].textContent.trim() : undefined;
+   
+    return {clientName, clientLtd}
+}
+
 export async function fetchGallery(name: string, url: string): Promise<{ skins: Skin[], gallery: GalleryItem[] }> {
     let skins: Skin[] = [];
     let gallery: GalleryItem[] = [];
@@ -20,9 +34,20 @@ export async function fetchGallery(name: string, url: string): Promise<{ skins: 
         tab.querySelectorAll(".shipskin-table tr").forEach(row => {
             let key = camelize(row.getElementsByTagName("th")[0].textContent.toLowerCase().trim());
             let value: any = row.getElementsByTagName("td")[0].textContent.trim();
+            
+            if (skinNameHeaders[key]) { // We can find out if the skin is limited
+                
+                try {
+                    const skinLtd = handleLtdSkin(row)
+                    info[key] = skinLtd.clientName
+                    info[skinNameHeaders[key]] = skinLtd.clientLtd
+                } catch(err) {
+                    console.error("Error finding limited-skin info for ship: %s", name)
+                }
+            }
             if (key === "live2dModel") value = (value === "Yes");
             if (key === "cost") value = parseInt(value);
-            // @ts-ignore
+
             return info[key] = value;
         });
         skins.push({

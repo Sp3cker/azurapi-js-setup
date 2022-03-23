@@ -129,3 +129,11 @@ export function timeout(ms: number): Promise<void> {
 export function textOr(node: Node, other: string) {
     return node ? node.textContent : other;
 }
+export const normalizeName = (name: string) => 
+    name.replace(/ ?\(Battleship\)/, '(BB)')
+    .replace('\u00b5', '\u03bc')
+    .replace('Pamiat Merkuria', 'Pamiat\' Merkuria')
+    .replace('Ookami', 'Ōkami')
+    .replace('Kasumi (DOA)', 'Kasumi')
+    .normalize("NFKC") // Needed for muse characters, in my experience.
+    .trim();

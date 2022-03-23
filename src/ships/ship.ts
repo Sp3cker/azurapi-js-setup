@@ -127,13 +127,17 @@ export type Skill = {
     color: string;
 }
 
-export type SkinInfo = {
+export interface SkinInfo extends  Record<string, string| number| boolean> {
     enClient?: string;
     cnClient?: string;
     jpClient?: string;
+    enLimited?: boolean;
+    cnLimited?: boolean;
+    jpLimited?: boolean;
     cost?: number;
     obtainedFrom: string;
     live2dModel: boolean;
+
 };
 
 export interface Skin {
