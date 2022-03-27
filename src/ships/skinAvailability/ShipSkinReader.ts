@@ -39,20 +39,43 @@ class ShipSkinReader {
 
   constructor(props: ShipSkinReaderProps) {
     this.shipList = props.shipList;
-    const limitedSkins = new SkinPage(props.doc).findNamesInCards();
+    const limitedSkins = new SkinPage({
+      doc: props.doc,
+      notJustLimited: true,
+    }); //.findNamesInCards();
+    console.log(limitedSkins)
+    // this.shipList.forEach((ship) => {
+    //   // Get each ships skins that were found on the Skins page.
+    //   const thisBoatsLimitedSkins = limitedSkins.filter(
+    //     (sk) => normalizeName(sk.boatName) === normalizeName(ship.names.en)
+    //   );
 
-    this.shipList.forEach((ship) => {
-      // Get each ships skins that were found on the Skins page.
-      const thisBoatsLimitedSkins = limitedSkins.filter(
-        (sk) => normalizeName(sk.boatName) === normalizeName(ship.names.en)
-      );
-
-      if (thisBoatsLimitedSkins.length === 0) { // Ship had no limited skins.
-        return;
-      }
-
-
-    });
+    //   if (thisBoatsLimitedSkins.length === 0) {
+    //     // Ship had no limited skins.
+    //     return;
+    //   }
+    //   for (const ltdSkin of thisBoatsLimitedSkins) {
+    //     const skinToUpdate = ship.skins.findIndex(
+    //       (x) => normalizeName(x.name) === normalizeName(ltdSkin.skinName)
+    //     );
+    //     if (skinToUpdate === -1) {
+    //       // Can't find skin name. I.E. skins don't match.
+    //       const galleryNames = ship.skins.map((s) => s.name);
+    //       console.error(
+    //         "Inconsistant name!",
+    //         thisBoatsLimitedSkins,
+    //         ship.skins[0].name
+    //       );
+    //       return;
+    //       // throw new Error(`
+    //       //   Limited skin found for ship: ${ship.names.en},
+    //       //   but skin names don't match - stopping.`);
+    //     }
+    //     this.shipList[this.shipList.indexOf(ship)].skins[
+    //       skinToUpdate
+    //     ].info.limited = true;
+    //   }
+    // });
   }
 }
 

@@ -1,32 +1,31 @@
+import type { BaseSkinCardStrategy } from "./SkinPage/BaseStrategy";
+import FindAllSkinsStrategy from "./SkinPage/FindAllSkinsStrategy";
+import FindLimitedSkinsStrategy from "./SkinPage/FindLimitedSkinsStrategy";
+
 type LimitedSkinModel = {
   skinName: string;
   boatName: string;
   limited: boolean;
 };
-
-const isDiv = (e: Element | null): e is HTMLDivElement => {
-  return e !== null && e.tagName === "DIV";
+type Props = {
+  doc: Document;
+  notJustLimited: boolean;
 };
+
 /**
  * Give me the Skins page parsed with JSDOM.
  */
 class SkinPage {
   limitedCards: HTMLDivElement[] = [];
   limitedSkins: LimitedSkinModel[] = undefined;
+  strategy: BaseSkinCardStrategy;
 
   /** Ok, we're gonna find all the shipcards with the LIMITED img referenced in em. */
-  constructor(doc: Document) {
-    doc.querySelectorAll("img[alt='LIMITED.png']").forEach((card) => {
-      if (!card.parentElement || card.parentElement.className !== "tooltip") {
-        return;
-      }
-
-      const closetShipcard = card.closest("div.azl-shipcard");
-      if (!isDiv(closetShipcard)) {
-        throw new Error("No div found around here");
-      }
-      this.limitedCards.push(closetShipcard);
-    });
+  constructor({ doc, notJustLimited }: Props) {
+    this.strategy = notJustLimited
+      ? new FindAllSkinsStrategy()
+      : new FindLimitedSkinsStrategy();
+    this.limitedCards = this.strategy.findCards(doc);
   }
   /**
    *

@@ -29,20 +29,6 @@ const handleLtdSkin = (row: Element): { clientSkinName: string, clientSkinLtd: s
     throw new Error(clientSkinName)
 }
 
-const skinNameHeaders = Object.freeze<Record<string,string>>({
-    'enClient':'enLimited',
-    'cnClient': 'cnLimited',
-    'jpClient':'jpLimited'
-})
-
-const handleLtdSkin = (row: Element) => {
-    const rowElements = row.getElementsByTagName("td")
-    const clientName = rowElements[0].textContent.trim();
-    const clientLtd = rowElements[1] ? rowElements[1].textContent.trim() : undefined;
-   
-    return {clientName, clientLtd}
-}
-
 export async function fetchGallery(name: string, url: string): Promise<{ skins: Skin[], gallery: GalleryItem[] }> {
     let skins: Skin[] = [];
     let gallery: GalleryItem[] = [];
