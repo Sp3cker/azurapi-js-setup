@@ -137,3 +137,15 @@ export const normalizeName = (name: string) =>
     .replace('Kasumi (DOA)', 'Kasumi')
     .normalize("NFKC") // Needed for muse characters, in my experience.
     .trim();
+// No Shame
+// https://stackoverflow.com/a/64123628
+export function keepIfInEnum<T>(
+    value: string,
+    enumObject: { [key: string]: T }
+  ) {
+    if (Object.values(enumObject).includes((value as unknown) as T)) {
+      return (value as unknown) as T;
+    } else {
+      return undefined;
+    }
+  }

@@ -829,9 +829,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Bilibili 8th Anniversary Event Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "22娘",
 					"cnLimited": "Limited",
 					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable",
 					"cost": 300
 				}
 			},
@@ -11417,9 +11419,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Lawson Collaboration - Complete the event tasks.",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "一日见习店员",
 					"cnLimited": "Event Limited",
-					"jpClient": "skin unavailable"
+					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable"
 				}
 			},
 			{
@@ -15004,7 +15008,7 @@
 			"availableIn": {
 				"light": false,
 				"heavy": false,
-				"aviation": false,
+				"aviation": "CN/JP Only",
 				"limited": "Only during event: Empyreal Tragicomedy",
 				"exchange": false
 			}
@@ -17309,7 +17313,9 @@
 					"live2dModel": false,
 					"obtainedFrom": "NicoNico Collaboration Event Questline",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "skin unavailable",
+					"cnLimited": "Unavailable",
 					"jpClient": "ニコニコ",
 					"jpLimited": "Event Limited"
 				}
@@ -19555,9 +19561,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Lawson Collaboration (part 2) - Complete the event tasks",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "肉包杀手",
 					"cnLimited": "Event Limited",
-					"jpClient": "skin unavailable"
+					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable"
 				}
 			},
 			{
@@ -48504,9 +48512,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "和平的号角",
 					"cnLimited": "Limited",
 					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable",
 					"cost": 700
 				}
 			},
@@ -90508,10 +90518,10 @@
 			"constructionTime": "05:15:00",
 			"availableIn": {
 				"light": false,
-				"heavy": false,
+				"heavy": "CN/JP Only",
 				"aviation": false,
 				"limited": "Only during event: Empyreal Tragicomedy",
-				"exchange": false
+				"exchange": "Merit"
 			}
 		},
 		"obtainedFrom": {
@@ -90808,7 +90818,7 @@
 				"heavy": false,
 				"aviation": false,
 				"limited": false,
-				"exchange": false
+				"exchange": "Merit"
 			}
 		},
 		"obtainedFrom": {
@@ -91063,7 +91073,7 @@
 			"constructionTime": "04:15:00",
 			"availableIn": {
 				"light": false,
-				"heavy": false,
+				"heavy": "CN/JP Only",
 				"aviation": false,
 				"limited": "Only during event: Empyrealn Tragicomedy",
 				"exchange": false
@@ -91353,7 +91363,7 @@
 			"constructionTime": "01:55:00",
 			"availableIn": {
 				"light": false,
-				"heavy": false,
+				"heavy": "CN/JP Only",
 				"aviation": false,
 				"limited": "Only during event: Empyreal Tragicomedy",
 				"exchange": false
@@ -91622,7 +91632,7 @@
 				"heavy": false,
 				"aviation": false,
 				"limited": false,
-				"exchange": false
+				"exchange": "Merit"
 			}
 		},
 		"obtainedFrom": {
@@ -91894,7 +91904,7 @@
 				"heavy": false,
 				"aviation": false,
 				"limited": false,
-				"exchange": false
+				"exchange": "Merit"
 			}
 		},
 		"obtainedFrom": {
@@ -111981,7 +111991,7 @@
 			"constructionTime": "01:55:00",
 			"availableIn": {
 				"light": false,
-				"heavy": false,
+				"heavy": "CN/JP Only",
 				"aviation": false,
 				"limited": "Only during event: Empyreal Tragicomedy Rerun",
 				"exchange": false
@@ -112250,7 +112260,7 @@
 		"construction": {
 			"constructionTime": "00:32:00",
 			"availableIn": {
-				"light": false,
+				"light": "CN/JP Only",
 				"heavy": false,
 				"aviation": false,
 				"limited": "Only during event: Empyreal Tragicomedy Rerun",
@@ -124208,7 +124218,8 @@
 				}
 			},
 			"voice": {
-				"name": "-"
+				"name": "Manaka Iwami",
+				"url": "https://en.wikipedia.org/wiki/Manaka_Iwami"
 			}
 		},
 		"skins": [
@@ -138325,9 +138336,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Bilibili 8th Anniversary Event Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "33娘",
 					"cnLimited": "Limited",
 					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable",
 					"cost": 300
 				}
 			},
@@ -149228,9 +149241,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Unobtainable",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "科罗拉多",
 					"cnLimited": "Permanently Available",
-					"jpClient": "skin unavailable"
+					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable"
 				}
 			},
 			{
@@ -149497,9 +149512,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Unobtainable",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "马里兰",
 					"cnLimited": "Permanently Available",
-					"jpClient": "skin unavailable"
+					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable"
 				}
 			}
 		],
@@ -149738,9 +149755,11 @@
 					"live2dModel": false,
 					"obtainedFrom": "Unobtainable",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "西弗吉尼亚",
 					"cnLimited": "Permanently Available",
-					"jpClient": "skin unavailable"
+					"jpClient": "skin unavailable",
+					"jpLimited": "Unavailable"
 				}
 			}
 		],
@@ -170906,6 +170925,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "久远(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "クオン(うたわれるもの)",
@@ -171143,6 +171163,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "猫音(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "ネコネ(うたわれるもの)",
@@ -171379,6 +171400,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "露露缇耶(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "ルルティエ(うたわれるもの)",
@@ -171616,6 +171638,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "乌璐露(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "ウルゥル(うたわれるもの)",
@@ -171853,6 +171876,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "萨拉娜(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "サラァナ(うたわれるもの)",
@@ -172090,6 +172114,7 @@
 					"live2dModel": false,
 					"obtainedFrom": "Skin Shop",
 					"enClient": "skin unavailable",
+					"enLimited": "Unavailable",
 					"cnClient": "芙米露露(传颂之物)",
 					"cnLimited": "Limited",
 					"jpClient": "フミルィル(うたわれるもの)",
