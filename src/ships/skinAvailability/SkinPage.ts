@@ -1,11 +1,17 @@
-import type { BaseSkinCardStrategy } from "./SkinPage/BaseStrategy";
-import FindAllSkinsStrategy from "./SkinPage/FindAllSkinsStrategy";
-import FindLimitedSkinsStrategy from "./SkinPage/FindLimitedSkinsStrategy";
+import { keepIfInEnum } from "../../utils";
+import { SkinCategories } from "./SkinPage/SkinPage.types";
+import {
+  BaseSkinCardStrategy,
+  ShipCardParseError,
+  findClosestCategory,
+} from "./SkinPage/strategies/BaseStrategy";
+import FindAllSkinsStrategy from "./SkinPage/strategies/FindAllSkinsStrategy";
+import FindLimitedSkinsStrategy from "./SkinPage/strategies/FindLimitedSkinsStrategy";
 
 type LimitedSkinModel = {
   skinName: string;
   boatName: string;
-  limited: boolean;
+  limited?: boolean;
 };
 type Props = {
   doc: Document;
@@ -16,26 +22,26 @@ type Props = {
  * Give me the Skins page parsed with JSDOM.
  */
 class SkinPage {
-  limitedCards: HTMLDivElement[] = [];
+  cards: HTMLDivElement[] = [];
   limitedSkins: LimitedSkinModel[] = undefined;
-  strategy: BaseSkinCardStrategy;
+  findCardsStrategy: BaseSkinCardStrategy;
 
-  /** Ok, we're gonna find all the shipcards with the LIMITED img referenced in em. */
   constructor({ doc, notJustLimited }: Props) {
-    this.strategy = notJustLimited
+    this.checkCategories(doc);
+    this.findCardsStrategy = notJustLimited
       ? new FindAllSkinsStrategy()
       : new FindLimitedSkinsStrategy();
-    this.limitedCards = this.strategy.findCards(doc);
+    this.cards = this.findCardsStrategy.findCards(doc);
   }
   /**
    *
    * @returns LimitedSkinModel[]
    */
   findNamesInCards() {
-    if (this.limitedCards.length === 0) {
+    if (this.cards.length === 0) {
       throw new Error("Gotta load the skins first, pal.");
     }
-    return this.limitedCards.map(this.findNamesInCard);
+    return this.cards.map(this.findNamesInCard);
   }
 
   findNamesInCard(card: HTMLDivElement): LimitedSkinModel {
@@ -52,8 +58,22 @@ class SkinPage {
     return {
       boatName: boatName.textContent,
       skinName: skinName.textContent,
-      limited: true,
     };
+  }
+  checkCategories(doc: Document) {
+    doc.querySelectorAll("article").forEach((tabber) => {
+      const heading = tabber.getAttribute("title");
+      if (!keepIfInEnum(heading, SkinCategories)) {
+        throw new ShipCardParseError(
+          `New or unknown skin category: ${heading}`,
+          tabber
+        );
+      }
+    });
+  }
+  assignCategories() {
+    // 'Event' category needs work to find it's actual category - like get the closest h3 or something
+    return this.cards.map(findClosestCategory);
   }
 }
 

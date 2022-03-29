@@ -43,7 +43,8 @@ class ShipSkinReader {
       doc: props.doc,
       notJustLimited: true,
     }); //.findNamesInCards();
-    console.log(limitedSkins)
+    const skn = new Set(limitedSkins.assignCategories());
+    console.log(skn)
     // this.shipList.forEach((ship) => {
     //   // Get each ships skins that were found on the Skins page.
     //   const thisBoatsLimitedSkins = limitedSkins.filter(

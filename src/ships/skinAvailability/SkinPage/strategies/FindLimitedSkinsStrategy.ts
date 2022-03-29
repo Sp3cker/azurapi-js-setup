@@ -2,6 +2,7 @@ import {
   BaseSkinCardStrategy,
   isDiv,
   ShipCardParseError,
+  findClosestCategory
 } from "./BaseStrategy";
 
 class FindLimitedSkinsStrategy extends BaseSkinCardStrategy {
@@ -23,6 +24,7 @@ class FindLimitedSkinsStrategy extends BaseSkinCardStrategy {
     }
     return cards;
   }
+  
 }
 
 export default FindLimitedSkinsStrategy;

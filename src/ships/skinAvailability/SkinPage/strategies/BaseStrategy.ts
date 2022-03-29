@@ -1,6 +1,32 @@
-import { SkinCardModel } from "./SkinPage.types";
+import { keepIfInEnum } from "../../../../utils";
+import {
+  SkinCardModel,
+  SkinCategories,
+  SkinCategoryValue,
+} from "../SkinPage.types";
+
+
 export const isDiv = (e: Element | null): e is HTMLDivElement => {
   return e !== null && e.tagName === "DIV";
+};
+
+const Unobtainable = new RegExp("Unobtainable", "m");
+export const findClosestCategory = (card: Element) => {
+  const cat = card.closest("article");
+  if (cat === null) {
+    const cardBottom = card.querySelector(".alc-bottom").textContent;
+    if (Unobtainable.test(cardBottom)) {
+      return;
+    }
+    console.error(card.innerHTML);
+    throw "fug";
+  }
+  const catTitle = cat.getAttribute("title").trim();
+  const keptCat = keepIfInEnum(catTitle, SkinCategories);
+  if (keptCat === undefined) {
+    throw new ShipCardParseError("Could not find category for ship card", card);
+  }
+  return keptCat;
 };
 
 /**
