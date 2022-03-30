@@ -1,7 +1,24 @@
 import { JSDOM } from "jsdom";
 import path from "path";
-import { BASE, camelize, fetch, galleryThumbnailUrlToActualUrl, keepIfInEnum } from "../utils";
+import {
+  BASE,
+  camelize,
+  fetch,
+  galleryThumbnailUrlToActualUrl,
+  keepIfInEnum,
+  normalizeName,
+} from "../utils";
 import { GalleryItem, Skin, SkinInfo, SkinLimitedStatus } from "./ship";
+import ShipSkinReader from "./skinAvailability/ShipSkinReader";
+
+let SkinPage: ShipSkinReader; // initialized later.
+const getSkinsPage = async () => {
+  if (!SkinPage) {
+    SkinPage = await ShipSkinReader.initialize();
+    return SkinPage;
+  }
+  return SkinPage;
+};
 
 const ClientSkinNameHeaders = Object.freeze<Record<string, string>>({
   enClient: "enLimited",
@@ -37,6 +54,7 @@ export async function fetchGallery(
   name: string,
   url: string
 ): Promise<{ skins: Skin[]; gallery: GalleryItem[] }> {
+  const skinReader = await getSkinsPage();
   let skins: Skin[] = [];
   let gallery: GalleryItem[] = [];
   let doc = new JSDOM(
@@ -49,6 +67,7 @@ export async function fetchGallery(
     (node) => {
       let image;
       let tab = <HTMLElement>node;
+      const skinname = tab.title;
       if (tab.querySelector(".tabber__panel"))
         image = {
           normal: tab.querySelector(".tabber__panel[title=Default] .shipskin-image img")
@@ -70,7 +89,11 @@ export async function fetchGallery(
         image = tab.querySelector(".shipskin-image img")
           ? (<HTMLImageElement>tab.querySelector(".shipskin-image img")).src
           : null;
-      let info: SkinInfo = { live2dModel: false, obtainedFrom: "" };
+      let info: SkinInfo = {
+        live2dModel: false,
+        obtainedFrom: "",
+        category: skinReader.skinToCategory[normalizeName(name)].get(normalizeName(skinname)),
+      };
       tab.querySelectorAll(".shipskin-table tr").forEach((row) => {
         let key = camelize(row.getElementsByTagName("th")[0].textContent.toLowerCase().trim());
         let value: any = row.getElementsByTagName("td")[0].textContent.trim();
@@ -95,11 +118,13 @@ export async function fetchGallery(
             );
           }
         }
-
         return (info[key] = value);
       });
+      if (info.category === undefined) {
+        console.error(`MIssing skin for ${name}:${skinname}`);
+      }
       skins.push({
-        name: tab.title,
+        name: skinname,
         image: typeof image === "string" || !image ? <string>image : image.normal,
         nobg: typeof image === "string" || !image ? undefined : image.nobg,
         cn: typeof image === "string" || !image ? undefined : image.cn,

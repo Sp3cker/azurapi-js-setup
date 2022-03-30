@@ -1,3 +1,5 @@
+import { SkinCategories } from "./skinAvailability/SkinPage/SkinPage.types";
+
 export type Url = string;
 export type Stat =
   | "health"
@@ -186,6 +188,7 @@ export interface SkinInfo extends Record<string, string | number | boolean> {
   cost?: number;
   obtainedFrom: string;
   live2dModel: boolean;
+  category: `${SkinCategories}`;
 }
 export interface Skin {
   name: string;

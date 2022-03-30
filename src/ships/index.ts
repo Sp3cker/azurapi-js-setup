@@ -6,6 +6,7 @@ import { JSDOM } from "jsdom";
 import cliProgress, { SingleBar } from "cli-progress";
 import { clone, fetch, fetchImage, getHash, timeout } from "../utils";
 import { fetchGallery } from "./gallery";
+import ShipSkinReader from "./skinAvailability/ShipSkinReader";
 
 export const ROOT = path.join(__dirname, "..", "..");
 export const SHIPS_PATH = path.join(ROOT, "dist", "ships.json");

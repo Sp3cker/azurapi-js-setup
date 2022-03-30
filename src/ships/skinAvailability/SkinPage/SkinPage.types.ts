@@ -5,6 +5,7 @@ export type SkinCardModel = {
 };
 
 export enum SkinCategories {
+  Default = "Default",
   Bluray = "Bluray",
   Bunny = "Bunny",
   Casual = "Casual",
@@ -29,5 +30,6 @@ export enum SkinCategories {
   CollabEvent = "Collab Event",
   Retrofit = "Retrofit",
   Wedding = "Wedding",
+  Unobtainable = "Unobtainable",
 }
-export type SkinCategoryValue =  `${SkinCategories}`
+export type SkinCategoryValue = `${SkinCategories}`;
