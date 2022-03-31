@@ -35,5 +35,5 @@ export enum NonGatedSkinNames {
   Default = "Default",
   Retrofit = "Retrofit",
   Wedding = "Wedding",
-  OriginalArt = "OriginalArt",
+  OriginalArt = "Original Art",
 }

@@ -16,15 +16,12 @@ let _SkinPage: SkinPage;
 const getSkinsPage = async () => {
   if (_SkinPage === undefined) {
     //@ts-ignore
-    SkinPage = ShipSkinReader.initialize();
+    _SkinPage = SkinPage.initialize();
     return _SkinPage;
   }
   return _SkinPage;
 };
 
-/**
- * "Gated" meaning not one of these 4 categories...idk
- */
 const ClientSkinNameHeaders = Object.freeze<Record<string, string>>({
   enClient: "enLimited",
   cnClient: "cnLimited",
@@ -73,7 +70,7 @@ export async function fetchGallery(
       let tab = <HTMLElement>node;
 
       const skinname = normalizeName(tab.title);
-      const nonGatedSkinName = !!keepIfInEnum(skinname, NonGatedSkinNames); // True if skinname is non-gated, false if gated.
+      const isNotGatedSkin = !!keepIfInEnum(skinname, NonGatedSkinNames); // True if skinname is gated, false if non-gated.
 
       let image;
       if (tab.querySelector(".tabber__panel"))
@@ -99,18 +96,18 @@ export async function fetchGallery(
           : null;
 
       const skinPageData = skinReader.skinPage.boatSkinMap.get(name);
-      if (skinPageData === undefined && nonGatedSkinName) {
-        throw new Error(`Skin page data missing for ${name}`);
+      if (skinPageData === undefined && isNotGatedSkin) {
+        throw new Error(`Skin page data missing for ${name}: ${skinname}`);
       }
 
-      const category = isGatedSkin
+      const category = !isNotGatedSkin
         ? skinPageData.get(skinname)
-        : skinname === "Retrofit"
-        ? SkinCategories.Retrofit
-        : skinname === "Wedding"
-        ? SkinCategories.Wedding
-        : skinname === "Default"
+        : skinname === NonGatedSkinNames.Default
         ? SkinCategories.Default
+        : skinname === NonGatedSkinNames.Retrofit
+        ? SkinCategories.Retrofit
+        : skinname === NonGatedSkinNames.Wedding
+        ? SkinCategories.Wedding
         : SkinCategories.Unobtainable;
 
       let info: SkinInfo = {

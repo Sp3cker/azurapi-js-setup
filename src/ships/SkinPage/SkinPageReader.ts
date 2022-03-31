@@ -7,11 +7,11 @@ import path from "path";
 const SKINS_PAGE = BASE + "/" + "/wiki/Skins";
 const PATH_TO_SKINS_JSON = path.resolve(__dirname, "..", "..", "..", "dist/ships.json");
 
-type ShipSkinReaderProps = {
+type SkinPageReaderProps = {
   doc: Document;
   shipList: Ship[];
 };
-class ShipSkinReader {
+class SkinPageReader {
   skinPage: SkinPage;
 
   /**
@@ -23,13 +23,13 @@ class ShipSkinReader {
     const page = await fetch(SKINS_PAGE, "skins.html");
     const shipListJson = await fs.readFile(PATH_TO_SKINS_JSON, "utf-8");
 
-    return new ShipSkinReader({
+    return new SkinPageReader({
       doc: new JSDOM(page).window.document,
       shipList: JSON.parse(shipListJson),
     });
   }
 
-  constructor(props: ShipSkinReaderProps) {
+  constructor(props: SkinPageReaderProps) {
     const skinPage = new SkinPage({
       doc: props.doc,
       notJustLimited: true,
@@ -54,4 +54,4 @@ class ShipSkinReader {
   }
 }
 
-export default ShipSkinReader;
+export default SkinPageReader;
