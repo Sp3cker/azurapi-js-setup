@@ -1,8 +1,4 @@
-import {
-  BaseSkinCardStrategy,
-  isDiv,
-  ShipCardParseError,
-} from "./BaseStrategy";
+import { BaseSkinCardStrategy, isDiv } from "./BaseStrategy";
 
 class FindAllSkinsStrategy extends BaseSkinCardStrategy {
   constructor() {
@@ -15,7 +11,7 @@ class FindAllSkinsStrategy extends BaseSkinCardStrategy {
       cards.push(card);
     });
     if (cards.length === 0) {
-      throw new ShipCardParseError("Error parsing skin cards - none found!");
+      throw new Error("Error parsing skin cards - none found!");
     }
     return cards;
   }

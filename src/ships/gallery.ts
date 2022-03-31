@@ -9,17 +9,22 @@ import {
   normalizeName,
 } from "../utils";
 import { GalleryItem, Skin, SkinInfo, SkinLimitedStatus } from "./ship";
-import ShipSkinReader from "./skinAvailability/ShipSkinReader";
+import SkinPage from "./SkinPage";
+import { NonGatedSkinNames, SkinCategories } from "./SkinPage/SkinPage.types";
 
-let SkinPage: ShipSkinReader; // initialized later.
+let _SkinPage: SkinPage;
 const getSkinsPage = async () => {
-  if (!SkinPage) {
-    SkinPage = await ShipSkinReader.initialize();
-    return SkinPage;
+  if (_SkinPage === undefined) {
+    //@ts-ignore
+    SkinPage = ShipSkinReader.initialize();
+    return _SkinPage;
   }
-  return SkinPage;
+  return _SkinPage;
 };
 
+/**
+ * "Gated" meaning not one of these 4 categories...idk
+ */
 const ClientSkinNameHeaders = Object.freeze<Record<string, string>>({
   enClient: "enLimited",
   cnClient: "cnLimited",
@@ -65,9 +70,12 @@ export async function fetchGallery(
   ).window.document;
   Array.from(doc.querySelectorAll(".mw-parser-output>.tabber>.tabber__section>article")).forEach(
     (node) => {
-      let image;
       let tab = <HTMLElement>node;
-      const skinname = tab.title;
+
+      const skinname = normalizeName(tab.title);
+      const nonGatedSkinName = !!keepIfInEnum(skinname, NonGatedSkinNames); // True if skinname is non-gated, false if gated.
+
+      let image;
       if (tab.querySelector(".tabber__panel"))
         image = {
           normal: tab.querySelector(".tabber__panel[title=Default] .shipskin-image img")
@@ -89,11 +97,28 @@ export async function fetchGallery(
         image = tab.querySelector(".shipskin-image img")
           ? (<HTMLImageElement>tab.querySelector(".shipskin-image img")).src
           : null;
+
+      const skinPageData = skinReader.skinPage.boatSkinMap.get(name);
+      if (skinPageData === undefined && nonGatedSkinName) {
+        throw new Error(`Skin page data missing for ${name}`);
+      }
+
+      const category = isGatedSkin
+        ? skinPageData.get(skinname)
+        : skinname === "Retrofit"
+        ? SkinCategories.Retrofit
+        : skinname === "Wedding"
+        ? SkinCategories.Wedding
+        : skinname === "Default"
+        ? SkinCategories.Default
+        : SkinCategories.Unobtainable;
+
       let info: SkinInfo = {
         live2dModel: false,
         obtainedFrom: "",
-        category: skinReader.skinToCategory[normalizeName(name)].get(normalizeName(skinname)),
+        category,
       };
+
       tab.querySelectorAll(".shipskin-table tr").forEach((row) => {
         let key = camelize(row.getElementsByTagName("th")[0].textContent.toLowerCase().trim());
         let value: any = row.getElementsByTagName("td")[0].textContent.trim();

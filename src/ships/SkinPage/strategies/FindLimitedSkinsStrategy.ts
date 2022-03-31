@@ -1,10 +1,8 @@
-import {
-  BaseSkinCardStrategy,
-  isDiv,
-  ShipCardParseError,
-  findClosestCategory
-} from "./BaseStrategy";
+import { BaseSkinCardStrategy, isDiv } from "./BaseStrategy";
 
+/**
+ * Not currently implemented anywhere.
+ */
 class FindLimitedSkinsStrategy extends BaseSkinCardStrategy {
   constructor() {
     super();
@@ -20,11 +18,10 @@ class FindLimitedSkinsStrategy extends BaseSkinCardStrategy {
       cards.push(closetShipcard);
     });
     if (cards.length === 0) {
-      throw new ShipCardParseError("No cards found on page :(");
+      throw new Error("No cards found on page :(");
     }
     return cards;
   }
-  
 }
 
 export default FindLimitedSkinsStrategy;

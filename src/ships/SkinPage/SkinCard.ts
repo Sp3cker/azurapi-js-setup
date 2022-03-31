@@ -1,6 +1,5 @@
 import { keepIfInEnum } from "../../utils";
-import { SkinCategories } from "./SkinPage/SkinPage.types";
-import { ShipCardParseError } from "./SkinPage/strategies/BaseStrategy";
+import { SkinCategories } from "./SkinPage.types";
 
 const UnobtainableRegex = new RegExp("Unobtainable", "m");
 const RetrofitRegex = new RegExp("Retrofit", "m");
@@ -44,15 +43,15 @@ class SkinCard {
     this.limited = !!card.querySelector("img[alt='LIMITED.png']"); // If LIMITED picture on a limited skincard
     this.skinCategory = this.findClosestCategory(card);
     this.isRetrofit = RetrofitRegex.test(this.skinName);
+    if (this.isRetrofit) {
+      this.skinCategory = SkinCategories.Retrofit;
+    }
     if (this.skinCategory === SkinCategories.Wedding) {
       this.isWedding = true;
     }
     if (this.skinCategory === SkinCategories.Unobtainable) {
       this.isOriginalArt = true;
     }
-    // if (this.isRetrofit) {
-    //   this.skinName = "Retrofit"; // No special names for retrofit skins (like wedding skins have)
-    // }
   }
 
   /**

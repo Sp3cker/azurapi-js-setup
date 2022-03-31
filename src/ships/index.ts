@@ -4,9 +4,8 @@ import fs from "fs";
 import path from "path";
 import { JSDOM } from "jsdom";
 import cliProgress, { SingleBar } from "cli-progress";
-import { clone, fetch, fetchImage, getHash, timeout } from "../utils";
+import { clone, fetch, fetchImage, getHash, timeout, normalizeName } from "../utils";
 import { fetchGallery } from "./gallery";
-import ShipSkinReader from "./skinAvailability/ShipSkinReader";
 
 export const ROOT = path.join(__dirname, "..", "..");
 export const SHIPS_PATH = path.join(ROOT, "dist", "ships.json");
@@ -72,7 +71,7 @@ async function fetchShip(id: string, { name, url }: { name: string; url: string 
     path.join(ROOT, `web/ships/${name}.html`)
   );
   let ship = await parseShip(id, name, data, `https://azurlane.koumakan.jp${url}`);
-  let gallery = await fetchGallery(name, url);
+  let gallery = await fetchGallery(normalizeName(name), url);
   ship.skins = gallery.skins;
   ship.gallery = gallery.gallery;
   return ship;

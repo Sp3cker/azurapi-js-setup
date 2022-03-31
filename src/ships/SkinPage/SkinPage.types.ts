@@ -1,9 +1,6 @@
-export type SkinCardModel = {
-  skinName: string;
-  boatName: string;
-  limited: boolean;
-};
-
+/**
+ * Based off of categories listed on Wiki
+ */
 export enum SkinCategories {
   Default = "Default",
   Bluray = "Bluray",
@@ -33,3 +30,10 @@ export enum SkinCategories {
   Unobtainable = "Unobtainable",
 }
 export type SkinCategoryValue = `${SkinCategories}`;
+
+export enum NonGatedSkinNames {
+  Default = "Default",
+  Retrofit = "Retrofit",
+  Wedding = "Wedding",
+  OriginalArt = "OriginalArt",
+}

@@ -1,4 +1,4 @@
-import { SkinCategories } from "./skinAvailability/SkinPage/SkinPage.types";
+import { SkinCategories } from "./SkinPage/SkinPage.types";
 
 export type Url = string;
 export type Stat =
