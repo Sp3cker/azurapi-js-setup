@@ -1,5 +1,5 @@
 import { keepIfInEnum, normalizeName } from "../../utils";
-import { NonGatedSkinNames, SkinCategories } from "./SkinPage.types";
+import { StandardNamedSkins, SkinCategories } from "./SkinPage.types";
 import { BaseSkinCardStrategy } from "./strategies/BaseStrategy";
 import SkinCard from "./SkinCard";
 import FindAllSkinsStrategy from "./strategies/FindAllSkinsStrategy";
@@ -22,9 +22,6 @@ class SkinPage {
   categories: Set<string> = new Set();
   boatSkinMap = new Map<string, BoatSkinMap>();
 
-  /**
-   *
-   */
   constructor({ doc }: Props) {
     this.checkCategories(doc);
     this.findCardsStrategy = new FindAllSkinsStrategy();
@@ -33,33 +30,36 @@ class SkinPage {
     this.cards.forEach((c) => {
       const boatName = normalizeName(c.boatName);
       const category = c.skinCategory;
-      let standardizedSkinName = normalizeName(c.skinName);
+      let skinName = normalizeName(c.skinName);
 
       if (c.isRetrofit || c.isWedding || c.isOriginalArt) {
-        // Can't match up by name if ^
-        standardizedSkinName =
-          c.skinName === NonGatedSkinNames.Default
-            ? NonGatedSkinNames.Default
+        // Can't match up by name if ^.
+        // Skin page isn't supposed to have default skins...
+        skinName =
+          c.skinName === StandardNamedSkins.Default
+            ? StandardNamedSkins.Default
             : c.isRetrofit
-            ? NonGatedSkinNames.Retrofit
+            ? StandardNamedSkins.Retrofit
             : c.isWedding
-            ? NonGatedSkinNames.Wedding
-            : NonGatedSkinNames.OriginalArt;
+            ? StandardNamedSkins.Wedding
+            : StandardNamedSkins.OriginalArt;
       }
 
       if (this.boatSkinMap.has(boatName)) {
         const bEntry = this.boatSkinMap.get(boatName);
-        bEntry.set(standardizedSkinName, category);
+        bEntry.set(skinName, category);
         this.boatSkinMap.set(boatName, bEntry);
       } else {
-        const skinToCategory = new Map([[standardizedSkinName, category]]);
+        const skinToCategory = new Map([[skinName, category]]);
         this.boatSkinMap.set(boatName, skinToCategory);
       }
-      // Sinse skin page is missing a few skins, polyfill them.
+      // Polyfill missing skins on Skin page (see knownBad.ts).
       for (const missingSkin of knownBad) {
         if (boatName === missingSkin.boatName) {
           const bEntry = this.boatSkinMap.get(boatName);
-          missingSkin.skins.forEach((s) => bEntry.set(s.skinName, s.category as SkinCategories));
+          missingSkin.skins.forEach((missing) =>
+            bEntry.set(missing.skinName, missing.category as SkinCategories)
+          );
           this.boatSkinMap.set(boatName, bEntry);
         }
       }

@@ -2,7 +2,6 @@
  * Based off of categories listed on Wiki
  */
 export enum SkinCategories {
-  Default = "Default",
   Bluray = "Bluray",
   Bunny = "Bunny",
   Casual = "Casual",
@@ -25,13 +24,16 @@ export enum SkinCategories {
   Miscellaneous = "Miscellaneous",
   Event = "Event",
   CollabEvent = "Collab Event",
-  Retrofit = "Retrofit",
-  Wedding = "Wedding",
   Unobtainable = "Unobtainable",
+
+  Retrofit = "Retrofit",
+  Default = "Default",
+  Wedding = "Wedding",
+  OriginalArt = "Original Art",
 }
 export type SkinCategoryValue = `${SkinCategories}`;
 
-export enum NonGatedSkinNames {
+export enum StandardNamedSkins {
   Default = "Default",
   Retrofit = "Retrofit",
   Wedding = "Wedding",

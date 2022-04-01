@@ -10,7 +10,7 @@ import {
 } from "../utils";
 import { GalleryItem, Skin, SkinInfo, SkinLimitedStatus } from "./ship";
 import SkinPage from "./SkinPage";
-import { NonGatedSkinNames, SkinCategories } from "./SkinPage/SkinPage.types";
+import { StandardNamedSkins, SkinCategories } from "./SkinPage/SkinPage.types";
 
 let _SkinPage: SkinPage;
 const getSkinsPage = async () => {
@@ -52,11 +52,48 @@ const handleLtdSkin = (
   throw new Error(clientSkinName);
 };
 
+const handleSkinCategory = ({
+  name,
+  skinName,
+  skinsPage,
+}: {
+  name: string;
+  skinName: string;
+  skinsPage: SkinPage;
+}): SkinCategories => {
+  // 'Default', 'Retrofit', 'Wedding', and 'Original Art' skins can be categorized from name alone.
+  if (keepIfInEnum(skinName, StandardNamedSkins)) {
+    // const category = !isNotGatedSkin
+    // ? skinPageData.get(skinname)
+    // : skinname === NonGatedSkinNames.Default
+    // ? SkinCategories.Default
+    // : skinname === NonGatedSkinNames.Retrofit
+    // ? SkinCategories.Retrofit
+    // : skinname === NonGatedSkinNames.Wedding
+    // ? SkinCategories.Wedding
+    // : SkinCategories.Unobtainable;
+
+    return keepIfInEnum(skinName, SkinCategories);
+  }
+  const entry = skinsPage.skinPage.boatSkinMap.get(name);
+  // If entry is undefined, this ship is missing a skin on the Skin page and we didnt put it
+  // into `knownBad.ts`.
+  if (entry === undefined) {
+    throw new Error(`${name} is missing all skins on Skins page.`);
+  }
+  const skinCategory = entry.get(skinName);
+
+  if (keepIfInEnum(skinCategory, SkinCategories)) {
+    return skinCategory;
+  }
+  throw new Error(`${name} is missing skin ${skinName} on Skins page, but has skin in Gallery.`);
+};
+
 export async function fetchGallery(
   name: string,
   url: string
 ): Promise<{ skins: Skin[]; gallery: GalleryItem[] }> {
-  const skinReader = await getSkinsPage();
+  const skinsPage = await getSkinsPage();
   let skins: Skin[] = [];
   let gallery: GalleryItem[] = [];
   let doc = new JSDOM(
@@ -69,9 +106,8 @@ export async function fetchGallery(
     (node) => {
       let tab = <HTMLElement>node;
 
-      const skinname = normalizeName(tab.title);
-      const isNotGatedSkin = !!keepIfInEnum(skinname, NonGatedSkinNames); // True if skinname is gated, false if non-gated.
-
+      const skinName = normalizeName(tab.title);
+      const skinCategory = handleSkinCategory({ name, skinName, skinsPage });
       let image;
       if (tab.querySelector(".tabber__panel"))
         image = {
@@ -95,25 +131,10 @@ export async function fetchGallery(
           ? (<HTMLImageElement>tab.querySelector(".shipskin-image img")).src
           : null;
 
-      const skinPageData = skinReader.skinPage.boatSkinMap.get(name);
-      if (skinPageData === undefined && isNotGatedSkin) {
-        throw new Error(`Skin page data missing for ${name}: ${skinname}`);
-      }
-
-      const category = !isNotGatedSkin
-        ? skinPageData.get(skinname)
-        : skinname === NonGatedSkinNames.Default
-        ? SkinCategories.Default
-        : skinname === NonGatedSkinNames.Retrofit
-        ? SkinCategories.Retrofit
-        : skinname === NonGatedSkinNames.Wedding
-        ? SkinCategories.Wedding
-        : SkinCategories.Unobtainable;
-
       let info: SkinInfo = {
         live2dModel: false,
         obtainedFrom: "",
-        category,
+        category: skinCategory,
       };
 
       tab.querySelectorAll(".shipskin-table tr").forEach((row) => {
@@ -143,10 +164,10 @@ export async function fetchGallery(
         return (info[key] = value);
       });
       if (info.category === undefined) {
-        console.error(`MIssing skin for ${name}:${skinname}`);
+        console.error(`gallery.ts: MIssing skin for ${name}:${skinName}`);
       }
       skins.push({
-        name: skinname,
+        name: skinName,
         image: typeof image === "string" || !image ? <string>image : image.normal,
         nobg: typeof image === "string" || !image ? undefined : image.nobg,
         cn: typeof image === "string" || !image ? undefined : image.cn,
